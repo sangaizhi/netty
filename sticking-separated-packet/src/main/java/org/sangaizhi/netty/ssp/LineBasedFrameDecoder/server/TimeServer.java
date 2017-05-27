@@ -18,18 +18,25 @@ import io.netty.handler.codec.string.StringDecoder;
  */
 public class TimeServer {
     public void bind(int port){
+
+        //  boss 线程池，管理 accept 事件
         EventLoopGroup boos = new NioEventLoopGroup();
+        // worker 线程池，管理各 channel 的IO事件
         EventLoopGroup worker = new NioEventLoopGroup();
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
+            // 注册 boss 和 worker 线程池
             bootstrap.group(boos, worker);
             bootstrap.channel(NioServerSocketChannel.class);
             bootstrap.option(ChannelOption.SO_BACKLOG,2048);
             bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 protected void initChannel(SocketChannel ch) throws Exception {
+                    // 添加以回车换行符为结束标志的解码器
                     ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
+                    // 添加将字节转换为对象的解码器
                     ch.pipeline().addLast(new StringDecoder());
+                    // 绑定事件处理器
                     ch.pipeline().addLast(new TimeServerHandler());
                 }
             });

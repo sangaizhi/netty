@@ -17,6 +17,8 @@ public class TimeServerHandler extends SimpleChannelInboundHandler {
 
 	@Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
+	    // 由于添加了 LineBasedFrameDecoder 解码器，所以此处接收到的消息都是删除了回车换行后的请求消息
+        // 不需要考虑半包问题，也不需要对请求消息进行编码
         String body = (String) msg;
         System.out.println("The time server receive order  :" + body + ": the counter is :" + ++counter);
         String currentTime = "QUERY ORDER TIME".equalsIgnoreCase(body) ? new Date(System.currentTimeMillis()).toString() : "BAD REQUEST";
