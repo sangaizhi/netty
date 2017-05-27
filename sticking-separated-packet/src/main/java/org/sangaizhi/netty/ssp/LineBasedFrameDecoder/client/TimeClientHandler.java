@@ -19,7 +19,7 @@ public class TimeClientHandler extends SimpleChannelInboundHandler {
     private byte[] req;
 
     TimeClientHandler(){
-        req = ("QUERY TIME ORDER" + System.getProperty("line.separator")).getBytes();
+        req = ("QUERY ORDER TIME" + System.getProperty("line.separator")).getBytes();
     }
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
